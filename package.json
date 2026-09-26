@@ -9,12 +9,21 @@
     "type": "git",
     "url": "git+https://github.com/xiangxinai/xiangxin-agent-hooks.git"
   },
-  "keywords": ["xiangxin", "system-one", "agent", "hooks", "claude-code", "codex", "dsh", "guardrails"],
+  "keywords": [
+    "xiangxin",
+    "system-one",
+    "agent",
+    "hooks",
+    "claude-code",
+    "codex",
+    "dsh",
+    "guardrails"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "xiangxin-hook": "./dist/cli.js"
+    "xiangxin-hook": "dist/cli.js"
   },
   "exports": {
     ".": {
@@ -28,7 +37,13 @@
     "./cordis.patch.yml": "./cordis.patch.yml",
     "./package.json": "./package.json"
   },
-  "files": ["dist", "cordis.patch.yml", "examples", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "cordis.patch.yml",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
