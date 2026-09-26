@@ -81,12 +81,12 @@ function toolMatches(rule: Rule, input: HookInput): boolean {
   return new RegExp(`^(?:${rule.tools})$`).test(input.tool_name)
 }
 
-/** 把 skills 目录展开成 choice 的选项。 */
-function buildQuestion(q: QuestionSpec, cwd: string, baseDir: string): Questions[string] {
+/** 把 skills 目录展开成 choice 的选项；相对路径相对项目目录（会话的 cwd）。 */
+function buildQuestion(q: QuestionSpec, cwd: string): Questions[string] {
   const { skills, ...rest } = q
   if (!skills) return rest as Questions[string]
   const criteria: Record<string, unknown> = {}
-  for (const s of loadSkills(skills.map(d => expandHome(d, baseDir)), cwd)) {
+  for (const s of loadSkills(skills, cwd)) {
     criteria[s.name] = s.description.slice(0, 400) || null
   }
   Object.assign(criteria, (q.criteria as Record<string, unknown> | undefined) ?? {})
@@ -137,7 +137,7 @@ export async function evaluate(input: HookInput, config: HooksConfig, client: Sy
     for (const [name, q] of Object.entries(rule.questions)) {
       let wire = name
       for (let n = 2; wire in g.questions; n++) wire = `${name}_${n}`
-      g.questions[wire] = buildQuestion(q, cwd, config.base_dir)
+      g.questions[wire] = buildQuestion(q, cwd)
       names[name] = wire
     }
     g.members.push({ rule, names })

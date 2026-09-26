@@ -146,6 +146,16 @@ describe('evaluate', () => {
     expect(d.context).toEqual(['与本次请求相关的 skill：pptx（若不符合用户真实意图请忽略）'])
   })
 
+  it('skills 相对路径相对会话 cwd，而不是配置文件目录', async () => {
+    const project = mkdtempSync(join(tmpdir(), 'xh-'))
+    mkdirSync(join(project, '.claude', 'skills', 'pptx'), { recursive: true })
+    writeFileSync(join(project, '.claude', 'skills', 'pptx', 'SKILL.md'), '---\nname: pptx\ndescription: 演示文稿\n---\n')
+    const rule = { id: 'r', event: 'UserPromptSubmit', questions: { skill: { type: 'choice', skills: ['.claude/skills'], criteria: { none: null } } }, when: 'skill != "none"', then: 'context' }
+    const client = fake({ skill: choice('none', { pptx: 0.1, none: 0.9 }) })
+    await evaluate({ hook_event_name: 'UserPromptSubmit', prompt: 'PPT', cwd: project }, parseConfig({ rules: [rule] }, join(project, '.xiangxin')), client)
+    expect(Object.keys((client.calls[0]!.questions.skill as { criteria: object }).criteria)).toEqual(['pptx', 'none'])
+  })
+
   it('写日志', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'xh-'))
     await evaluate(input, parseConfig({ log: 'log/hooks.jsonl', rules: [DANGER] }, dir), fake({ destructive: noul(0.95) }))
