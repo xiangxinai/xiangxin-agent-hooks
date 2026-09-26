@@ -14,12 +14,18 @@ rules:
   - id: destructive-shell
     event: PreToolUse
     tools: Bash|bash|shell|exec_command
-    state: {命令: "{{tool_input.command}}", 工作目录: "{{cwd}}"}
+    state: {命令: "{{tool_input.command}}"}
     questions:
-      destructive: {type: noul, instructions: "`命令` 是否会不可恢复地删除或覆盖用户数据？"}
-    when: destructive > 0.8
+      risk:
+        type: choice
+        instructions: 一个编程助手想在用户电脑上执行这条命令。它应当怎样处理？
+        criteria:
+          allow: 直接执行：只读查看、构建、测试、在项目里正常编辑文件
+          ask: 先问用户：会对外产生影响，或删改可以恢复但用户可能在意的东西
+          deny: 拒绝：不可恢复地删除、清空、覆盖或破坏用户的文件、数据、版本历史或系统配置
+    when: risk.p.deny > 0.35
     then: deny
-    message: "象信判断这条命令可能破坏数据（{{destructive}}），请换一种可回退的做法。"
+    message: "象信判断这条命令可能破坏数据（{{risk.p.deny}}），请换一种可回退的做法。"
 ```
 
 完整示例（破坏性命令、对外操作确认、只读自动批准、skill 路由、提示注入检测）见 [examples/hooks.yaml](examples/hooks.yaml)。

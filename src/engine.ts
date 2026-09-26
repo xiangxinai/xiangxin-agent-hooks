@@ -135,9 +135,16 @@ export async function evaluate(input: HookInput, config: HooksConfig, client: Sy
     if (!g) groups.set(key, g = { model, state, questions: {}, members: [] })
     const names: Record<string, string> = {}
     for (const [name, q] of Object.entries(rule.questions)) {
+      const built = buildQuestion(q, cwd)
+      const spec = JSON.stringify(built)
+      // 同一请求里同名且定义相同的问题只问一次（几条规则共用一个判断时，省 token）。
+      // 名字也算问题的一部分：没有 instructions 时模型读的就是名字。
+      const same = Object.entries(g.questions).find(([wire, existing]) =>
+        (wire === name || wire.startsWith(`${name}_`)) && JSON.stringify(existing) === spec)
+      if (same) { names[name] = same[0]; continue }
       let wire = name
       for (let n = 2; wire in g.questions; n++) wire = `${name}_${n}`
-      g.questions[wire] = buildQuestion(q, cwd)
+      g.questions[wire] = built
       names[name] = wire
     }
     g.members.push({ rule, names })

@@ -97,6 +97,14 @@ describe('evaluate', () => {
     expect(d.fired).toHaveLength(0)
   })
 
+  it('完全相同的问题只问一次', async () => {
+    const twin = { ...DANGER, id: 'twin', when: 'destructive > 0.5', then: 'ask' }
+    const client = fake({ destructive: noul(0.7) })
+    const d = await evaluate(input, parseConfig({ rules: [DANGER, twin] }, '/'), client)
+    expect(Object.keys(client.calls[0]!.questions)).toEqual(['destructive'])
+    expect(d.action).toBe('ask')
+  })
+
   it('state 相同的规则合成一次请求，同名问题改名；取最严格的决定', async () => {
     const other = { ...DANGER, id: 'secrets', questions: { destructive: { type: 'noul' }, leak: { type: 'noul' } }, when: 'leak > 0.5', then: 'ask', message: '可能泄露密钥' }
     const client = fake({ destructive: noul(0.9), leak: noul(0.6) })
