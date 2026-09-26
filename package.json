@@ -1,0 +1,68 @@
+{
+  "name": "@xiangxinai/agent-hooks",
+  "version": "0.1.0",
+  "description": "用象信一号 / 条件反射给智能体加确定性的 if：在 Claude Code、Codex、DeepSeek Harness 等框架的 hook 点上按规则放行、拦截、注入上下文",
+  "license": "Apache-2.0",
+  "author": "象信AI <wanglei@xiangxinai.cn>",
+  "homepage": "https://docs.xiangxinai.cn/agent-hooks",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiangxinai/xiangxin-agent-hooks.git"
+  },
+  "keywords": ["xiangxin", "system-one", "agent", "hooks", "claude-code", "codex", "dsh", "guardrails"],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "xiangxin-hook": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./dsh": {
+      "types": "./dist/dsh.d.ts",
+      "default": "./dist/dsh.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "cordis.patch.yml", "examples", "README.md", "LICENSE"],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "prepare": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build"
+  },
+  "dependencies": {
+    "@xiangxinai/sdk": "^0.1.1",
+    "yaml": "^2.6.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-llm": ">=0.1.0-rc.6"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-llm": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.0"
+  }
+}

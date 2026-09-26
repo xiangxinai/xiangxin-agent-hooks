@@ -1,0 +1,7 @@
+# @xiangxinai/agent-hooks：把 .xiangxin/hooks.yaml 里的规则挂到 dsh 的拦截点上。
+# 规则文件查找顺序：configPath、$XIANGXIN_HOOKS_CONFIG、<会话目录>/.xiangxin/hooks.yaml、~/.xiangxin/hooks.yaml。
+# 需要环境变量 XIANGXIN_API_KEY。
+- insert:
+    - id: xiangxin-agent-hooks
+      name: '@xiangxinai/agent-hooks/dsh'
+      config: {}
