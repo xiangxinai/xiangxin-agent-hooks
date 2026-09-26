@@ -1,0 +1,54 @@
+# 推送 v* 标签即发布到 npm（Trusted Publishing / OIDC + provenance，不需要令牌和 2FA 验证码）。
+#   git tag v0.1.0 && git push origin v0.1.0
+# 首次使用前需在 npmjs.com 的 @xiangxinai/agent-hooks → Settings → Trusted Publisher 里添加：
+#   GitHub Actions  owner=xiangxinai  repo=xiangxin-agent-hooks  workflow=release.yml  environment=npm
+name: release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/@xiangxinai/agent-hooks
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      # Trusted Publishing 需要 npm >= 11.5.1
+      - run: npm install -g npm@latest && npm --version
+      - run: pnpm install --frozen-lockfile
+      - name: 标签必须与包版本一致
+        run: |
+          v=$(node -p "require('./package.json').version")
+          test "v$v" = "$GITHUB_REF_NAME" || { echo "tag $GITHUB_REF_NAME != package.json $v"; exit 1; }
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - run: npm publish --provenance --access public
+
+  github-release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: 用 CHANGELOG 对应段落创建 GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="$v" '$0 ~ "^## "v" " {f=1; next} /^## / {f=0} f' CHANGELOG.md > notes.md
+          gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md
