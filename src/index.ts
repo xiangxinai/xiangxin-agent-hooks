@@ -1,5 +1,5 @@
 /**
- * @xiangxinai/agent-hooks：用象信一号 / 条件反射给智能体加确定性的 if。
+ * @xiangxinai/agent-hooks：用象信·系统一 / 条件反射给智能体加确定性的 if。
  *
  * 同一份规则文件（.xiangxin/hooks.yaml）三种用法：
  * - `xiangxin-hook` 命令行：Claude Code、Codex、hermes 的 command hook

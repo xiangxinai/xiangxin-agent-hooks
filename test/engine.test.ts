@@ -60,7 +60,7 @@ describe('when 表达式', () => {
 describe('配置校验', () => {
   it('补默认值', () => {
     const c = parseConfig({ rules: [DANGER] }, '/x')
-    expect(c.model).toBe('xiangxin-latest')
+    expect(c.model).toBe('xiangxin-s1-latest')
     expect(c.timeout_ms).toBe(3000)
     expect(c.on_error).toBe('ignore')
   })

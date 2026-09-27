@@ -1,7 +1,7 @@
 {
   "name": "xiangxin-hooks",
   "version": "0.1.0",
-  "description": "用象信一号 / 条件反射按 .xiangxin/hooks.yaml 的规则放行、拦截工具调用，自动批准，给大模型补上下文",
+  "description": "用象信·系统一 / 条件反射按 .xiangxin/hooks.yaml 的规则放行、拦截工具调用，自动批准，给大模型补上下文",
   "author": { "name": "象信AI", "url": "https://xiangxinai.cn" },
   "homepage": "https://docs.xiangxinai.cn/agent-hooks",
   "license": "Apache-2.0"

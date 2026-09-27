@@ -1,7 +1,7 @@
 {
   "name": "@xiangxinai/agent-hooks",
-  "version": "0.1.1",
-  "description": "用象信一号 / 条件反射给智能体加确定性的 if：在 Claude Code、Codex、DeepSeek Harness 等框架的 hook 点上按规则放行、拦截、注入上下文",
+  "version": "0.1.2",
+  "description": "用象信·系统一 / 条件反射给智能体加确定性的 if：在 Claude Code、Codex、DeepSeek Harness 等框架的 hook 点上按规则放行、拦截、注入上下文",
   "license": "Apache-2.0",
   "author": "象信AI <wanglei@xiangxinai.cn>",
   "homepage": "https://docs.xiangxinai.cn/agent-hooks",

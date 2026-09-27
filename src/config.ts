@@ -76,7 +76,7 @@ export function parseConfig(raw: unknown, baseDir: string): HooksConfig {
   if (!['ignore', 'ask', 'deny'].includes(onError)) throw new ConfigError(`on_error 只能是 ignore / ask / deny`)
   const ids = new Set<string>()
   const out: HooksConfig = {
-    model: typeof r.model === 'string' ? r.model : 'xiangxin-latest',
+    model: typeof r.model === 'string' ? r.model : 'xiangxin-s1-latest',
     timeout_ms: typeof r.timeout_ms === 'number' ? r.timeout_ms : 3000,
     on_error: onError,
     max_chars: typeof r.max_chars === 'number' ? r.max_chars : 4000,
