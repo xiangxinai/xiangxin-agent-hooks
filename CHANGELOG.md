@@ -2,7 +2,7 @@
 
 ## 0.1.2 (2026-09-27)
 
-- 默认模型从 `xiangxin-latest` 改为 `xiangxin-s1-latest`（旧名服务端仍然接受）
+- 默认模型改为 `xiangxin-s1-latest`
 
 ## 0.1.1 (2026-09-26)
 
