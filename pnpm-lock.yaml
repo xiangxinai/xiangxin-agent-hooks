@@ -12,8 +12,8 @@ importers:
         specifier: '>=0.1.0-rc.6'
         version: 0.1.0-rc.8(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-attachment@0.1.0-rc.8(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-brand@0.1.0-rc.8(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-invariants@0.1.0-rc.8(@deepseek-ai/cordis@4.0.4)))(@deepseek-ai/dsh-invariants@0.1.0-rc.8(@deepseek-ai/cordis@4.0.4)))(@deepseek-ai/dsh-brand@0.1.0-rc.8(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-invariants@0.1.0-rc.8(@deepseek-ai/cordis@4.0.4)))(@deepseek-ai/dsh-invariants@0.1.0-rc.8(@deepseek-ai/cordis@4.0.4))(@deepseek-ai/dsh-timeout@0.1.0-rc.8(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-invariants@0.1.0-rc.8(@deepseek-ai/cordis@4.0.4)))
       '@xiangxinai/sdk':
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: ^0.3.0
+        version: 0.3.0
       yaml:
         specifier: ^2.6.0
         version: 2.9.1
@@ -598,8 +598,8 @@ packages:
   '@vitest/utils@3.2.7':
     resolution: {integrity: sha512-x6BDOd7dyo3PFLY3I9/HJ25X/6OurhGXk2/B9gOZNPF7XDVjeBK4k01lQE5uvDpbuheErh91qYuE1E2OEjK3Rw==}
 
-  '@xiangxinai/sdk@0.1.1':
-    resolution: {integrity: sha512-XHnvOTiF2RNJnSF5DVNslP9Hrbb8wuteoTIn6SeWRb5ECju/BWgOnTdAa1oWp+cSeBso88Ho3dK1hWDvzujSFQ==}
+  '@xiangxinai/sdk@0.3.0':
+    resolution: {integrity: sha512-dGWWxZXqq+ROSVz+nvvkCwrRC+ADNU+KQ0Jj5erG2LQiHH6oe9Sfao2vxIeZQ05aPtVUsabf42nVZgV1PnxZhw==}
     engines: {node: '>=18'}
 
   acorn@8.18.0:
@@ -1318,7 +1318,7 @@ snapshots:
       loupe: 3.2.1
       tinyrainbow: 2.0.0
 
-  '@xiangxinai/sdk@0.1.1': {}
+  '@xiangxinai/sdk@0.3.0': {}
 
   acorn@8.18.0: {}
 
