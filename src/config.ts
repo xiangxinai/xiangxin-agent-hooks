@@ -35,8 +35,6 @@ export interface Rule {
   tools?: string
   /** 模型；默认用配置顶层的 model。 */
   model?: string
-  /** 练好的条件反射名，等价于 `model: xiangxin-reflex:<名>`。 */
-  reflex?: string
   /** state 模板，`{{tool_input.command}}` 之类；省略时按事件取默认内容。 */
   state?: unknown
   questions: Record<string, QuestionSpec>
@@ -55,7 +53,7 @@ export interface HooksConfig {
   on_error: 'ignore' | 'ask' | 'deny'
   /** state 里每个字符串的最大字数。 */
   max_chars: number
-  /** 每次判断追加一行 JSONL（state、问题、答案、决定），可用来标注后练条件反射。 */
+  /** 每次判断追加一行 JSONL（state、问题、答案、决定），便于回看判断、调阈值。 */
   log?: string
   rules: Rule[]
   /** 配置文件所在目录，用于解析相对路径。 */
@@ -76,7 +74,7 @@ export function parseConfig(raw: unknown, baseDir: string): HooksConfig {
   if (!['ignore', 'ask', 'deny'].includes(onError)) throw new ConfigError(`on_error 只能是 ignore / ask / deny`)
   const ids = new Set<string>()
   const out: HooksConfig = {
-    model: typeof r.model === 'string' ? r.model : 'xiangxin-s1-latest',
+    model: typeof r.model === 'string' ? r.model : 'xiangxin-latest',
     timeout_ms: typeof r.timeout_ms === 'number' ? r.timeout_ms : 3000,
     on_error: onError,
     max_chars: typeof r.max_chars === 'number' ? r.max_chars : 4000,
@@ -116,16 +114,11 @@ function parseRule(x: unknown, i: number, ids: Set<string>): Rule {
     if (t !== 'noul' && t !== 'choice' && t !== 'score') throw new ConfigError(`${at}: 问题 "${name}" 的 type 须是 noul / choice / score`)
     if (t !== 'choice' && (q as QuestionSpec).skills) throw new ConfigError(`${at}: 只有 choice 问题能用 skills`)
   }
-  if (r.model !== undefined && r.reflex !== undefined) throw new ConfigError(`${at}: model 与 reflex 只能写一个`)
-  if (r.reflex !== undefined && (typeof r.reflex !== 'string' || !/^[a-z0-9][a-z0-9-]{0,62}$/.test(r.reflex))) {
-    throw new ConfigError(`${at}: reflex 名须为小写字母、数字或连字符`)
-  }
   return {
     id,
     event: r.event as HookEvent,
     ...(typeof r.tools === 'string' ? { tools: r.tools } : {}),
     ...(typeof r.model === 'string' ? { model: r.model } : {}),
-    ...(typeof r.reflex === 'string' ? { reflex: r.reflex } : {}),
     ...(r.state !== undefined ? { state: r.state } : {}),
     questions: qs as Record<string, QuestionSpec>,
     when: r.when,

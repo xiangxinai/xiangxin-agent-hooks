@@ -1,8 +1,8 @@
 # @xiangxinai/agent-hooks
 
-给智能体加上确定性的 `if`：在 Claude Code、Codex、DeepSeek Harness（dsh）、hermes 等框架的 hook 点上，用[象信·系统一](https://docs.xiangxinai.cn)或你练好的条件反射做判断，按规则放行、拦截、交给用户确认，或给大模型补一句上下文。
+给智能体加上确定性的 `if`：在 Claude Code、Codex、DeepSeek Harness（dsh）、hermes 等框架的 hook 点上，用[象信](https://docs.xiangxinai.cn)做判断，按规则放行、拦截、交给用户确认，或给大模型补一句上下文。
 
-象信·系统一不是聊天模型，不该做成让大模型"自己决定要不要调"的工具或 MCP。它的位置在框架里：每次工具调用、每条用户输入、每个审批，框架都**无条件**问一次，代码按概率分支。大模型不知道它的存在，也绕不过它。
+象信不是聊天模型，不该做成让大模型"自己决定要不要调"的工具或 MCP。它的位置在框架里：每次工具调用、每条用户输入、每个审批，框架都**无条件**问一次，代码按概率分支。大模型不知道它的存在，也绕不过它。
 
 ## 规则文件
 
@@ -39,7 +39,7 @@ rules:
 | `when` | 条件：`x > 0.8`、`skill != "none" and skill.confidence > 0.5`、`risk.p["高"] > 0.3`；支持 `and` `or` `not` 括号 `+ -` |
 | `then` | `allow` · `ask` · `deny` · `context` |
 | `message` | 拦截理由或注入的上下文，可引用答案 `{{destructive}}`、`{{skill}}` |
-| `model` / `reflex` | 换模型，或用练好的条件反射（`reflex: my-approver` 即 `xiangxin-reflex:my-approver`） |
+| `model` | 换模型，默认用顶层的 `model`（`xiangxin-latest`）；可写版本化 ID 如 `xiangxin-2.0.0` 固定版本 |
 
 `then` 在各事件上的含义：
 
@@ -97,9 +97,9 @@ echo '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command"
 xiangxin-hook check                # 只校验配置
 ```
 
-## 从规则到条件反射
+## 判断日志
 
-设了 `log` 后，每次判断追加一行 JSONL（state、问题、答案、决定）。把其中判断错的几十条改成正确答案，就是 `client.reflexes.create({ name, questions, examples })` 要的样本；练好后在规则里写 `reflex: <名>`，判断就按你的习惯来。
+设了 `log` 后，每次判断追加一行 JSONL（state、问题、答案、决定）。回看其中判断错的几条，改问法或阈值，再用 `xiangxin-hook explain` 验证。
 
 ## 注意
 

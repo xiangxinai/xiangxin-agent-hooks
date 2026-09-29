@@ -60,7 +60,7 @@ describe('when 表达式', () => {
 describe('配置校验', () => {
   it('补默认值', () => {
     const c = parseConfig({ rules: [DANGER] }, '/x')
-    expect(c.model).toBe('xiangxin-s1-latest')
+    expect(c.model).toBe('xiangxin-latest')
     expect(c.timeout_ms).toBe(3000)
     expect(c.on_error).toBe('ignore')
   })
@@ -69,7 +69,6 @@ describe('配置校验', () => {
     expect(() => parseConfig({ rules: [{ ...DANGER, then: 'maybe' }] }, '/')).toThrow(ConfigError)
     expect(() => parseConfig({ rules: [{ ...DANGER, event: 'Whatever' }] }, '/')).toThrow(ConfigError)
     expect(() => parseConfig({ rules: [DANGER, DANGER] }, '/')).toThrow(/重复/)
-    expect(() => parseConfig({ rules: [{ ...DANGER, reflex: 'Bad Name' }] }, '/')).toThrow(ConfigError)
   })
 })
 
@@ -116,11 +115,11 @@ describe('evaluate', () => {
     expect(d.fired.map(f => f.rule)).toEqual(['danger', 'secrets'])
   })
 
-  it('reflex 规则用 xiangxin-reflex:<名>', async () => {
+  it('规则可指定 model，覆盖顶层默认', async () => {
     const client = fake({ ok: noul(0.9) })
-    const rule = { id: 'auto', event: 'PermissionRequest', reflex: 'my-approver', questions: { ok: { type: 'noul' } }, when: 'ok > 0.8', then: 'allow' }
+    const rule = { id: 'auto', event: 'PermissionRequest', model: 'xiangxin-2.0.0', questions: { ok: { type: 'noul' } }, when: 'ok > 0.8', then: 'allow' }
     const d = await evaluate({ ...input, hook_event_name: 'PermissionRequest' }, parseConfig({ rules: [rule] }, '/'), client)
-    expect(client.calls[0]!.model).toBe('xiangxin-reflex:my-approver')
+    expect(client.calls[0]!.model).toBe('xiangxin-2.0.0')
     expect(client.calls[0]!.state).toEqual({ 工具: 'Bash', 参数: { command: 'rm -rf ~/photos' } })
     expect(d.action).toBe('allow')
   })

@@ -126,7 +126,7 @@ export async function evaluate(input: HookInput, config: HooksConfig, client: Sy
   const env: Record<string, unknown> = { ...input, tool: input.tool_name, input: input.tool_input }
   const groups = new Map<string, Group>()
   for (const rule of rules) {
-    const model = rule.reflex ? `xiangxin-reflex:${rule.reflex}` : rule.model ?? config.model
+    const model = rule.model ?? config.model
     const state = rule.state === undefined
       ? renderState(defaultState(input), {}, config.max_chars)
       : renderState(rule.state, env, config.max_chars)
